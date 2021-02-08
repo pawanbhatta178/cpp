@@ -1,0 +1,12 @@
+Is she right?
+As part of your job requirements at Google, you are occasionally asked to
+interview candidates for employment.
+One of your favorite questions is “show me some code segment that you deem
+particularly “interesting …” ”
+The candidate you are currently interviewing shows you the following c++
+expression:
+((n&(n-1)) == 0)
+As you scratch your head, she says “this returns true if n is either zero or a power
+of 2.”
+Is she correct in her claim?
+Prove or disprove.
