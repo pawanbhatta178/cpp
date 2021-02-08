@@ -1,0 +1,4 @@
+Write a function sum(...) so that
+cout<<sum(1,2,3) will print 6 and
+cout<<sum(10,20) will print 30 and
+cout<<sum( any number of values) will print the correct sum.
