@@ -1,1 +1,3 @@
 Problem: Given n, find the number of ones in the integers 1 – n.
+
+Ans:
