@@ -98,3 +98,8 @@ int main()
     cout << q.del() << q.del() << q.del() << endl;
     return 0;
 }
+
+//In some compiler, the evaluation of method calls takes place starting from the
+// last. For example: cout<< "1+2="<<1+2<<endl. Here 1+2 is evaluated first.
+//Then before sending it to console however,
+//the order is the same as what is declared.

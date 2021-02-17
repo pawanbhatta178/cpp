@@ -1,106 +1,22 @@
+In some compiler, the order in which evaluation of expressions separated by
+insertion operators is right associative which means that last expression after 
+the last insertion operator is evaluated first and then previous ones are evaluated. 
+Then they are  concatenated together and sent to screen to print. 
 
-// On some compilers this works as expected, but ...
-// on some  .... try it and see what happens.
+Queue has a, b, c. 
+cout<< q.del()<<q.del()<<q.del;
+Expected: abc    Actual Result: cba
 
-#include <iostream>
-using namespace std;
+In some compilers, the third q.del() happens first which returns 'a'. Then second q.del() is evaluated 
+which returns 'b'. Likewise third evaluates to 'c'. Now before they are sent to console, they are 
+concatenated together in order they were declared. Therefore yielding 'cba' instead of expected 
+'abc'. 
+In order to get the expected output, we will need to write our code as:
 
+char a,b,c;
+char a=q.del();
+char b=q.del();
+char c=q.del();
+cout<<a<<b<<c;
 
-class queue
-{
-private:
-	char* s;
-	int F, R, size;
-public:
-	queue(int i=4)
-	{
-		s= new char[i];
-		size=i;
-		F=R=-1;
-	}
-
-	~queue()
-	{
-		delete []s;
-	}
-
-	bool empty()
-	{
-		return F==R;
-	}
-
-/*	bool full()//this is for a non circular queue
-	{
-		if (F==-1 && R==size-1)
-			return true;
-		for (int i=0; i<=F; i++)
-			s[i]=s[F+i+1];
-		R=R-F-1;
-		F=-1;
-		return false;
-	}*/
-
-	bool full()
-	{
-		if ((R+1)%5==F)
-			return true;
-		return false;
-	}
-
-
-/*	void add (char c)//non circular add
-	{
-		if (full())
-		{
-			cout << "queue is full";
-			exit(1);
-		}
-		R++;
-		s[R]=c;
-	}*/
-
-	void add (char c)
-	{
-		if (full())
-		{
-			cout << "queue is full";
-			exit(1);
-		}
-		R=(R+1)%size;
-		s[R]=c;
-	}
-
-/*	char del()// non circular
-	{
-		if (empty())
-		{
-			cout << "queue empty";
-			exit(1);
-		}
-		F++;
-		return s[F];
-	}*/
-
-	char del()
-	{
-		if (empty())
-		{
-			cout << "queue empty";
-			exit(1);
-		}
-		F=(F+1)%size;//only difference
-		return s[F];
-	}
-
-
-};
-
-int main()
-{
-	queue q;
-	q.add('a');
-	q.add('b');
-	q.add('c');
-	cout << q.del() << q.del() << q.del();
-	return 0;
-}
+This code will always give us the expected result no matter which compiler we are using. 
