@@ -96,6 +96,7 @@ public:
 
     friend ostream &operator<<(ostream &os, SA s);
 };
+
 ostream &operator<<(ostream &os, SA s)
 {
     int size = s.high - s.low + 1;
@@ -103,6 +104,7 @@ ostream &operator<<(ostream &os, SA s)
         cout << s.p[i] << endl;
     return os;
 };
+
 int main()
 {
     SA a(10), b(3, 5);
