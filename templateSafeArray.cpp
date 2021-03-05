@@ -100,11 +100,85 @@ public:
     }
 };
 
+template <class T>
+class Matrix
+{
+private:
+    int low, high;
+    SA<T> *p;
+
+public:
+    Matrix()
+    {
+        low = 0;
+        high = -1;
+        p = NULL;
+    }
+    Matrix(int l, int h)
+    {
+        if (h < l)
+        {
+            cout << "Matrix constructor error in bounds definition" << endl;
+            exit(1);
+        }
+        low = l;
+        high = h;
+        p = new SA<T>[h - l + 1];
+        cout << "Matrix constructor with double args ran: low: " << low << " high: " << high << endl;
+    }
+
+    Matrix(const Matrix &a)
+    {
+        int size = a.high - a.low + 1;
+        p = new SA<T>[size];
+        for (int i = 0; i < size; i++)
+            p[i] = a.p[i];
+        low = a.low;
+        high = a.high;
+        cout << "Matrix Copy constructor called low: " << low << " high: " << high << endl;
+    }
+    Matrix &operator=(const Matrix &a)
+    {
+        if (this == &a)
+        {
+            return *this;
+        }
+        delete[] p;
+        int size = a.high - a.low + 1;
+        p = new SA<T>[size];
+        for (int i = 0; i < size; i++)
+            p[i] = a.p[i];
+        low = a.low;
+        high = a.high;
+        cout << "Matrix Assignment Operator called low: " << low << " high: " << high << endl;
+        return *this;
+    }
+
+    SA<T> &operator[](int i)
+    {
+        cout << "Overloaded [] operator called: " << low << " high: " << high << endl;
+        if (i < low || i > high)
+        {
+            cout << "index " << i << " out of range" << endl;
+            exit(1);
+        }
+        return p[i - low];
+    }
+
+    ~Matrix()
+    {
+        cout << "Matrix destructor with double args ran: low: " << low << " high: " << high << endl;
+        delete[] p;
+    }
+};
+
 int main()
 {
     SA<int> c(20);
     c[1] = 5555;
     SA<int> d = c;
-    cout << d << endl;
+    Matrix<int> e(0, 20);
+    e[0] = d;
+    cout << e[0] << endl;
     return 0;
 }
