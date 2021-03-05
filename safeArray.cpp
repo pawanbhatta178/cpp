@@ -112,21 +112,18 @@ int main()
     int i;
     for (i = 0; i < 10; i++)
         a[i] = 10 - i;
-    cout << "printing a the first time“ <<endl;
-        cout
-         << a << endl;
+    cout << "printing a the first time" << endl;
+    cout << a << endl;
     cout << "printing using []" << endl;
     for (i = 0; i < 10; i++)
         cout << a[i] << endl;
     // write your own sort
-    Sort(a, 10);
-    cout << "printing a the second time“ <<endl;
-        cout
-         << a << endl;
+    // Sort(a, 10);
+    cout << "printing a the second time" << endl;
+    cout << a << endl;
     b[4] = 12;
-    cout << "printing b “ <<endl;
-        cout
-         << b << endl;
+    cout << "printing b " << endl;
+    cout << b << endl;
     a[10] = 12; // should print an error message and exit
     return 0;
 }
