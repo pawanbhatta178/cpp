@@ -103,6 +103,8 @@ public:
 int main()
 {
     SA<int> c(20);
-    cout << c << endl;
+    c[1] = 5555;
+    SA<int> d = c;
+    cout << d << endl;
     return 0;
 }
