@@ -8,16 +8,16 @@ class SA
 {
 
 private:
-    int low, high;
+    int lowRow, highRow;
     T *p;
 
 public:
     SA()
     {
-        low = 0;
-        high = -1;
+        lowRow = 0;
+        highRow = -1;
         p = NULL;
-        cout << "defualt constructor ran: low: " << low << " high: " << high << endl;
+        cout << "defualt constructor ran: lowRow: " << lowRow << " highRow: " << highRow << endl;
     }
 
     SA(int l, int h)
@@ -27,10 +27,10 @@ public:
             cout << "constructor error in bounds definition" << endl;
             exit(1);
         }
-        low = l;
-        high = h;
+        lowRow = l;
+        highRow = h;
         p = new T[h - l + 1];
-        cout << " constructor with double args ran: low: " << low << " high: " << high << endl;
+        cout << " constructor with double args ran: lowRow: " << lowRow << " highRow: " << highRow << endl;
     }
 
     SA(int capacity)
@@ -40,21 +40,21 @@ public:
             cout << "constructor error: Please instantiate SA of positive length" << endl;
             exit(1);
         }
-        low = 0;
-        high = capacity - 1;
+        lowRow = 0;
+        highRow = capacity - 1;
         p = new T[capacity];
-        cout << " constructor with single arg ran: low: " << low << " high: " << high << endl;
+        cout << " constructor with single arg ran: lowRow: " << lowRow << " highRow: " << highRow << endl;
     }
 
     SA(const SA &a)
     {
-        int size = a.high - a.low + 1;
+        int size = a.highRow - a.lowRow + 1;
         p = new T[size];
         for (int i = 0; i < size; i++)
             p[i] = a.p[i];
-        low = a.low;
-        high = a.high;
-        cout << "Copy constructor called low: " << low << " high: " << high << endl;
+        lowRow = a.lowRow;
+        highRow = a.highRow;
+        cout << "Copy constructor called lowRow: " << lowRow << " highRow: " << highRow << endl;
     }
 
     SA &operator=(const SA &a)
@@ -64,30 +64,30 @@ public:
             return *this;
         }
         delete[] p;
-        int size = a.high - a.low + 1;
+        int size = a.highRow - a.lowRow + 1;
         p = new T[size];
         for (int i = 0; i < size; i++)
             p[i] = a.p[i];
-        low = a.low;
-        high = a.high;
-        cout << "Assignment Operator called low: " << low << " high: " << high << endl;
+        lowRow = a.lowRow;
+        highRow = a.highRow;
+        cout << "Assignment Operator called lowRow: " << lowRow << " highRow: " << highRow << endl;
         return *this;
     }
 
     T &operator[](int i)
     {
-        cout << "Overloaded [] operator called: " << low << " high: " << high << endl;
-        if (i < low || i > high)
+        cout << "Overloaded [] operator called: " << lowRow << " highRow: " << highRow << endl;
+        if (i < lowRow || i > highRow)
         {
             cout << "index " << i << " out of range" << endl;
             exit(1);
         }
-        return p[i - low];
+        return p[i - lowRow];
     }
 
     friend ostream &operator<<(ostream &os, SA s)
     {
-        int size = s.high - s.low + 1;
+        int size = s.highRow - s.lowRow + 1;
         for (int i = 0; i < size; i++)
             cout << s.p[i] << endl;
         return os;
@@ -104,39 +104,50 @@ template <class T>
 class Matrix
 {
 private:
-    int low, high;
+    int lowRow, highRow;
+    int lowCol, highCol;
     SA<T> *p;
 
 public:
     Matrix()
     {
-        low = 0;
-        high = -1;
+        lowRow = 0;
+        highRow = -1;
+        lowCol = 0;
+        highCol = 0;
         p = NULL;
     }
-    Matrix(int l, int h)
+    Matrix(int lr, int hr, int lc, int hc)
     {
-        if (h < l)
+        if ((hr < lr) || (hc < lc))
         {
             cout << "Matrix constructor error in bounds definition" << endl;
             exit(1);
         }
-        low = l;
-        high = h;
-        p = new SA<T>[h - l + 1];
-        cout << "Matrix constructor with double args ran: low: " << low << " high: " << high << endl;
+
+        lowRow = lr;
+        highRow = hr;
+        lowCol = lc;
+        highCol = hc;
+        p = new SA<T>[hr - lr + 1];
+        for (int i = 0; i < (hc - lc + 1); i++)
+        {
+            p[lowCol + i] = SA<T>(lc, hc);
+        }
+        cout << "Matrix constructor with double args ran: lowRow: " << lowRow << " highRow: " << highRow << endl;
     }
 
     Matrix(const Matrix &a)
     {
-        int size = a.high - a.low + 1;
+        int size = a.highRow - a.lowRow + 1;
         p = new SA<T>[size];
         for (int i = 0; i < size; i++)
             p[i] = a.p[i];
-        low = a.low;
-        high = a.high;
-        cout << "Matrix Copy constructor called low: " << low << " high: " << high << endl;
+        lowRow = a.lowRow;
+        highRow = a.highRow;
+        cout << "Matrix Copy constructor called lowRow: " << lowRow << " highRow: " << highRow << endl;
     }
+
     Matrix &operator=(const Matrix &a)
     {
         if (this == &a)
@@ -144,41 +155,40 @@ public:
             return *this;
         }
         delete[] p;
-        int size = a.high - a.low + 1;
+        int size = a.highRow - a.lowRow + 1;
         p = new SA<T>[size];
         for (int i = 0; i < size; i++)
             p[i] = a.p[i];
-        low = a.low;
-        high = a.high;
-        cout << "Matrix Assignment Operator called low: " << low << " high: " << high << endl;
+        lowRow = a.lowRow;
+        highRow = a.highRow;
+        cout << "Matrix Assignment Operator called lowRow: " << lowRow << " highRow: " << highRow << endl;
         return *this;
     }
 
     SA<T> &operator[](int i)
     {
-        cout << "Overloaded [] operator called: " << low << " high: " << high << endl;
-        if (i < low || i > high)
+        cout << "Overloaded [] operator called: " << lowRow << " highRow: " << highRow << endl;
+        if (i < lowRow || i > highRow)
         {
             cout << "index " << i << " out of range" << endl;
             exit(1);
         }
-        return p[i - low];
+        return p[i - lowRow];
     }
 
     ~Matrix()
     {
-        cout << "Matrix destructor with double args ran: low: " << low << " high: " << high << endl;
+        cout << "Matrix destructor with double args ran: lowRow: " << lowRow << " highRow: " << highRow << endl;
         delete[] p;
     }
 };
 
 int main()
 {
-    SA<int> c(20);
-    c[1] = 5555;
-    SA<int> d = c;
-    Matrix<int> e(0, 20);
-    e[0] = d;
-    cout << e[0] << endl;
+    Matrix<int> e(50, 100, 0, 20);
+    e[50][2] = 9999;
+    cout << e[40][1] << endl;
+    cout << e[40][2] << endl;
+
     return 0;
 }
