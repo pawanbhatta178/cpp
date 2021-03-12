@@ -89,7 +89,7 @@ public:
     {
         int size = s.highRow - s.lowRow + 1;
         for (int i = 0; i < size; i++)
-            cout << s.p[i] << endl;
+            cout << s.p[i] << " " << endl;
         return os;
     }
 
@@ -155,10 +155,48 @@ public:
         }
         cout << " constructor with single arg ran: lowRow: " << lowRow << " highRow: " << highRow << endl;
     }
+
+    Matrix<T> &operator=(const Matrix<T> &a)
+    {
+        if (this == &a)
+        {
+            return *this;
+        }
+        delete[] p;
+        int size = a.highRow - a.lowRow + 1;
+        p = new T[size];
+        for (int i = 0; i < size; i++)
+            p[i] = a.p[i];
+        lowRow = a.lowRow;
+        highRow = a.highRow;
+        cout << "Assignment Operator called lowRow: " << lowRow << " highRow: " << highRow << endl;
+        return *this;
+    }
+
+    SA<T> &operator[](int i)
+    {
+        cout << "Overloaded [] operator called: " << lowRow << " highRow: " << highRow << endl;
+        if (i < lowRow || i > highRow)
+        {
+            cout << "index " << i << " out of range" << endl;
+            exit(1);
+        }
+        return p[i - lowRow];
+    }
+
+    friend ostream &operator<<(ostream &os, Matrix<T> s)
+    {
+        int size = s.highRow - s.lowRow + 1;
+        for (int i = 0; i < size; i++)
+            cout << s.p[i] << endl;
+        return os;
+    }
 };
 
 int main()
 {
     Matrix<int> m(10, 10);
+    cout << m[9][9] << endl;
+    cout << m << endl;
     return 0;
 }
