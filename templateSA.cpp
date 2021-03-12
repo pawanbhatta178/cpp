@@ -192,30 +192,22 @@ public:
     }
 };
 
-class Multiply
+Matrix<int> Multiply(Matrix<int> first, Matrix<int> second)
 {
-private:
-    Matrix<int> a;
-    Matrix<int> b;
-
-public:
-    Multiply(Matrix<int> first, Matrix<int> second)
+    if ((first.highCol - first.lowCol) != (second.highRow - second.lowRow))
     {
-        if ((first.highCol - first.lowCol) != (second.highRow - second.lowRow))
-        {
-            cout << "Matrix Multiplication only possible when number of cols of first matrix equals number of rows of the second matrix." << endl;
-            exit(0);
-        }
-        a = first;
-        b = second;
-        }
-};
+        cout << "Matrix Multiplication only possible when number of cols of first matrix equals number of rows of the second matrix." << endl;
+        exit(0);
+    }
+    Matrix<int> ans(first.highRow - first.lowRow, second.highCol - second.lowCol);
+
+    return ans;
+}
 
 int main()
 {
-    Matrix<int> m(10, 10);
-    Matrix<int> n(10, 10);
-    cout << m[9][9] << endl;
-    cout << m << endl;
+    Matrix<int> m(10, 11);
+    Matrix<int> n(11, 11);
+    cout << Multiply(m, n) << endl;
     return 0;
 }
