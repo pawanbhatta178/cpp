@@ -103,11 +103,10 @@ public:
 template <class T>
 class Matrix
 {
-private:
+public:
     int lowRow, highRow, lowCol, highCol;
     SA<SA<T> > p;
 
-public:
     Matrix()
     {
         lowRow = 0;
@@ -193,9 +192,29 @@ public:
     }
 };
 
+class Multiply
+{
+private:
+    Matrix<int> a;
+    Matrix<int> b;
+
+public:
+    Multiply(Matrix<int> first, Matrix<int> second)
+    {
+        if ((first.highCol - first.lowCol) != (second.highRow - second.lowRow))
+        {
+            cout << "Matrix Multiplication only possible when number of cols of first matrix equals number of rows of the second matrix." << endl;
+            exit(0);
+        }
+        a = first;
+        b = second;
+        }
+};
+
 int main()
 {
     Matrix<int> m(10, 10);
+    Matrix<int> n(10, 10);
     cout << m[9][9] << endl;
     cout << m << endl;
     return 0;
