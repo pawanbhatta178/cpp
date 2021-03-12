@@ -174,6 +174,7 @@ public:
     friend ostream &operator<<(ostream &os, Matrix<T> s)
     {
         int size = s.highRow - s.lowRow + 1;
+        cout << endl;
         for (int i = 0; i < size; i++)
             cout << s.p[i] << endl;
         return os;
@@ -204,8 +205,23 @@ int main()
 {
     Matrix<int> m(3, 3);
     Matrix<int> n(3, 2);
-    m[0][0] = 1;
-    n[0][0] = 1;
+    for (int i = 0; i < 3; i++)
+    {
+        for (int j = 0; j < 3; j++)
+        {
+            m[i][j] = j;
+        }
+    }
+
+    for (int i = 0; i < 3; i++)
+    {
+        for (int j = 0; j < 2; j++)
+        {
+            n[i][j] = j;
+        }
+    }
+    cout << m << " X " << n << endl;
+    cout << "=" << endl;
     cout << Multiply(m, n) << endl;
     return 0;
 }
