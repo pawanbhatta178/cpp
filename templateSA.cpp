@@ -17,7 +17,6 @@ public:
         lowRow = 0;
         highRow = -1;
         p = NULL;
-        cout << "defualt constructor ran: lowRow: " << lowRow << " highRow: " << highRow << endl;
     }
 
     SA(int l, int h)
@@ -30,7 +29,6 @@ public:
         lowRow = l;
         highRow = h;
         p = new T[h - l + 1];
-        cout << " constructor with double args ran: lowRow: " << lowRow << " highRow: " << highRow << endl;
     }
 
     SA(int capacity)
@@ -43,7 +41,6 @@ public:
         lowRow = 0;
         highRow = capacity - 1;
         p = new T[capacity];
-        cout << " constructor with single arg ran: lowRow: " << lowRow << " highRow: " << highRow << endl;
     }
 
     SA(const SA &a)
@@ -54,7 +51,6 @@ public:
             p[i] = a.p[i];
         lowRow = a.lowRow;
         highRow = a.highRow;
-        cout << "Copy constructor called lowRow: " << lowRow << " highRow: " << highRow << endl;
     }
 
     SA &operator=(const SA &a)
@@ -70,13 +66,11 @@ public:
             p[i] = a.p[i];
         lowRow = a.lowRow;
         highRow = a.highRow;
-        cout << "Assignment Operator called lowRow: " << lowRow << " highRow: " << highRow << endl;
         return *this;
     }
 
     T &operator[](int i)
     {
-        cout << "Overloaded [] operator called: " << lowRow << " highRow: " << highRow << endl;
         if (i < lowRow || i > highRow)
         {
             cout << "index " << i << " out of range" << endl;
@@ -89,14 +83,13 @@ public:
     {
         int size = s.highRow - s.lowRow + 1;
         for (int i = 0; i < size; i++)
-            cout << s.p[i] << " " << endl;
+            cout << s.p[i] << " ";
         return os;
     }
 
     ~SA()
     {
         delete[] p;
-        cout << "Destructor called " << endl;
     }
 };
 
@@ -113,7 +106,6 @@ public:
         highRow = -1;
         lowCol = 0;
         highCol = -1;
-        cout << "defualt constructor ran: lowRow: " << lowRow << " highRow: " << highRow << endl;
     }
 
     Matrix(int lr, int hr, int lc, int hc)
@@ -133,7 +125,6 @@ public:
         {
             p[i] = SA<T>(lc, hc);
         }
-        cout << " constructor with double args ran: lowRow: " << lowRow << " highRow: " << highRow << endl;
     }
 
     Matrix(int rowCapacity, int colCapacity)
@@ -152,7 +143,6 @@ public:
         {
             p[i] = SA<T>(lowCol, highCol);
         }
-        cout << " constructor with single arg ran: lowRow: " << lowRow << " highRow: " << highRow << endl;
     }
 
     Matrix<T> &operator=(const Matrix<T> &a)
@@ -168,13 +158,11 @@ public:
             p[i] = a.p[i];
         lowRow = a.lowRow;
         highRow = a.highRow;
-        cout << "Assignment Operator called lowRow: " << lowRow << " highRow: " << highRow << endl;
         return *this;
     }
 
     SA<T> &operator[](int i)
     {
-        cout << "Overloaded [] operator called: " << lowRow << " highRow: " << highRow << endl;
         if (i < lowRow || i > highRow)
         {
             cout << "index " << i << " out of range" << endl;
@@ -199,15 +187,25 @@ Matrix<int> Multiply(Matrix<int> first, Matrix<int> second)
         cout << "Matrix Multiplication only possible when number of cols of first matrix equals number of rows of the second matrix." << endl;
         exit(0);
     }
-    Matrix<int> ans(first.highRow - first.lowRow, second.highCol - second.lowCol);
-
+    Matrix<int> ans(first.highRow - first.lowRow + 1, second.highCol - second.lowCol + 1);
+    for (int i = 0; i < first.highRow - first.lowRow + 1; i++)
+    {
+        for (int j = 0; j < second.highCol - second.lowCol + 1; j++)
+        {
+            ans[i][j] = 0;
+            for (int k = 0; k < first.highCol - first.lowCol + 1; k++)
+                ans[i][j] += first[i][k] * second[k][j];
+        }
+    }
     return ans;
 }
 
 int main()
 {
-    Matrix<int> m(10, 11);
-    Matrix<int> n(11, 11);
+    Matrix<int> m(3, 3);
+    Matrix<int> n(3, 2);
+    m[0][0] = 1;
+    n[0][0] = 1;
     cout << Multiply(m, n) << endl;
     return 0;
 }
