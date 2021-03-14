@@ -1,6 +1,7 @@
 #include <iostream>
 #include <cstdlib>
 #include <cassert>
+#include <ctime>
 using namespace std;
 
 template <class T>
@@ -205,21 +206,27 @@ int main()
 {
     Matrix<int> m(3, 3);
     Matrix<int> n(3, 2);
+
+    srand(time(0)); // Initialize random number generator.
+
+    //initializing 1st safe matrix, changing max value of i and j will change the matrix size.
     for (int i = 0; i < 3; i++)
     {
         for (int j = 0; j < 3; j++)
         {
-            m[i][j] = j;
+            m[i][j] = (rand() % 10);
         }
     }
 
+    //initializing 2nd safe matrix, changing max value of i and j will change the matrix size.
     for (int i = 0; i < 3; i++)
     {
         for (int j = 0; j < 2; j++)
         {
-            n[i][j] = j;
+            n[i][j] = (rand() % 10);
         }
     }
+
     cout << m << " X " << n << endl;
     cout << "=" << endl;
     cout << Multiply(m, n) << endl;
