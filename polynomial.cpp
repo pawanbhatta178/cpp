@@ -30,6 +30,13 @@ public:
         cout << t.coefficient << "x^" << t.exponent;
         return os;
     }
+
+    friend ostream &operator<<(ostream &os, Term &t)
+    {
+
+        cout << t.coefficient << "x^" << t.exponent;
+        return os;
+    }
 };
 
 class Polynomial
@@ -40,7 +47,7 @@ private:
 public:
     Polynomial()
     {
-        this->head = NULL;
+        head = NULL;
     }
 
     void insertTerm(int coef, int pow)
@@ -50,6 +57,7 @@ public:
         {
             return;
         }
+
         Term t(coef, pow, NULL);
 
         if (head == NULL)
@@ -59,12 +67,21 @@ public:
         else
         {
             Term *current = head;
-            while (current->next != NULL)
+            while (current != NULL)
             {
                 current = current->next;
             }
-            current->next = &t;
+            current = &t;
         }
+        // cout << t << endl;
+    }
+
+    void printPolynomial()
+    {
+
+        cout << head->exponent << endl;
+        cout << head->next->exponent << endl;
+        cout << head->next->next->exponent << endl;
     }
 
     // friend ostream &operator<<(ostream &os, Polynomial p)
@@ -88,20 +105,23 @@ public:
     //     return os;
     // }
 
-    ~Polynomial()
-    {
-        Term *current = head;
-        while (current != NULL)
-        {
-            Term *temp = current->next;
-            delete current;
-            current = temp;
-        }
-    }
+    // ~Polynomial()
+    // {
+    //     Term *current = head;
+    //     while (current != NULL)
+    //     {
+    //         Term *temp = current->next;
+    //         delete current;
+    //         current = temp;
+    //     }
+    // }
 };
 
 int main()
 {
     Polynomial p;
     p.insertTerm(2, 3);
+    p.insertTerm(9, 9);
+    p.insertTerm(9, 4);
+    p.printPolynomial();
 }
