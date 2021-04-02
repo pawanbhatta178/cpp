@@ -93,6 +93,41 @@ public:
         }
         return os;
     }
+
+    void printTerm(ofstream &outFile)
+    {
+        if (coefficient != 0)
+        {
+            if (exponent == 0)
+            {
+                outFile << coefficient;
+            }
+            else if (coefficient == 1 && exponent == 1)
+            {
+                outFile << "x";
+            }
+            else if (coefficient == -1 && exponent == 1)
+            {
+                outFile << "-x";
+            }
+            else if (coefficient == 1)
+            {
+                outFile << "x^" << exponent;
+            }
+            else if (coefficient == -1)
+            {
+                outFile << "-x^" << exponent;
+            }
+            else if (exponent == 1)
+            {
+                outFile << coefficient << "x";
+            }
+            else
+            {
+                outFile << coefficient << "x^" << exponent;
+            }
+        }
+    }
 };
 
 class Polynomial
@@ -196,28 +231,6 @@ public:
             new_node->next = current->next;
             current->next = new_node;
         }
-    }
-
-    void printPolynomial()
-    {
-        Term *t = head;
-        while (t != NULL)
-        {
-            if (t == head)
-            {
-                cout << t;
-            }
-            else
-            {
-                if (t->coefficient > 0)
-                {
-                    cout << "+";
-                }
-                cout << t;
-            }
-            t = t->next;
-        }
-        cout << endl;
     }
 
     Polynomial operator+(const Polynomial &a)
@@ -337,6 +350,34 @@ public:
         return os;
     }
 
+    void printPolynomial(ofstream &outFile)
+    {
+        Term *t = head;
+
+        if (t->coefficient == 0)
+        {
+            outFile << "0";
+        }
+
+        while (t != NULL)
+        {
+            if (t == head)
+            {
+                t->printTerm(outFile);
+            }
+            else
+            {
+                if (t->coefficient > 0)
+                {
+                    outFile << "+";
+                }
+                t->printTerm(outFile);
+            }
+            t = t->next;
+        }
+        outFile << endl;
+    }
+
     // ~Polynomial()
     // {
     //     Term *current = head;
@@ -354,6 +395,10 @@ int main()
     string inputName = "input.txt";
     ifstream input;
     input.open(inputName);
+
+    string outputName = "output.txt";
+    ofstream output;
+    output.open(outputName);
 
     if (input.is_open())
     {
@@ -379,27 +424,30 @@ int main()
                 second = p;
             }
         }
-        cout << "As given in the file: " << endl;
-        cout << first;
-        cout << second;
-        cout << "\nCononical Form:" << endl;
+        output << "As given in the file: " << endl;
+        first.printPolynomial(output);
+        second.printPolynomial(output);
+        output << "\nCononical Form:" << endl;
         first.consolidate();
         second.consolidate();
-        cout << first;
-        cout << second;
-        cout << "\nPerforming Addition yields:" << endl;
+        first.printPolynomial(output);
+        second.printPolynomial(output);
+        output << "\nPerforming Addition yields:" << endl;
         Polynomial p;
         p = first + second;
-        cout << p;
-        cout << "\nPerforming Subtraction yields:" << endl;
+        p.printPolynomial(output);
+        output << "\nPerforming Subtraction yields:" << endl;
         p = first - second;
-        cout << p;
-        cout << "\nPerforming Multiplication yields:" << endl;
+        p.printPolynomial(output);
+        output << "\nPerforming Multiplication yields:" << endl;
         p = first * second;
-        cout << p;
+        p.printPolynomial(output);
     }
     else
     {
-        cout << "ERROR: The input file with following name does not exists or there was problem reading it: " << inputName << endl;
+        output << "ERROR: The input file with following name does not exists or there was problem reading it: " << inputName << endl;
     }
+    input.close();
+    output.close();
+    return 0;
 }

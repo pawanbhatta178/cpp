@@ -1,0 +1,16 @@
+As given in the file: 
+-5-x
+-x-5
+
+Cononical Form:
+-x-5
+-x-5
+
+Performing Addition yields:
+-2x-10
+
+Performing Subtraction yields:
+0
+
+Performing Multiplication yields:
+x^2+10x+25
