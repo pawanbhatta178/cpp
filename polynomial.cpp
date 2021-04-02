@@ -110,6 +110,11 @@ public:
                 current->next = temp;
                 continue;
             }
+            //updating tail
+            if (current->next == NULL)
+            {
+                tail = current;
+            }
             current = current->next;
         }
     }
@@ -183,26 +188,69 @@ public:
         cout << endl;
     }
 
-    // friend ostream &operator<<(ostream &os, Polynomial p)
-    // {
+    Polynomial operator+(const Polynomial &a)
+    {
+        Polynomial ans;
+        Term *t = head;
+        while (t != NULL)
+        {
+            ans.insertTerm(t->coefficient, t->exponent);
+            t = t->next;
+        }
+        Term *t2 = a.head;
+        while (t2 != NULL)
+        {
+            ans.insertTerm(t2->coefficient, t2->exponent);
+            t = t->next;
+        }
+        return ans;
+    }
 
-    //     if (p.head != NULL)
-    //     {
+    friend ostream &operator<<(ostream &os, Polynomial p)
+    {
+        Term *t = p.head;
+        while (t != NULL)
+        {
+            if (t == p.head)
+            {
+                cout << t;
+            }
+            else
+            {
+                if (t->coefficient > 0)
+                {
+                    cout << "+";
+                }
+                cout << t;
+            }
+            t = t->next;
+        }
+        cout << endl;
+        return os;
+    }
 
-    //         Term *current = p.head;
-    //         cout << current;
-    //         while (current->next != NULL)
-    //         {
-    //             current = current->next;
-    //             if (current->coefficient < 0)
-    //             {
-    //                 cout << "-" << current;
-    //             }
-    //             cout << "+" << current;
-    //         }
-    //     }
-    //     return os;
-    // }
+    friend ostream &operator<<(ostream &os, Polynomial *p)
+    {
+        Term *t = p->head;
+        while (t != NULL)
+        {
+            if (t == p->head)
+            {
+                cout << t;
+            }
+            else
+            {
+                if (t->coefficient > 0)
+                {
+                    cout << "+";
+                }
+                cout << t;
+            }
+            t = t->next;
+        }
+        cout << endl;
+        return os;
+    }
 
     // ~Polynomial()
     // {
@@ -225,18 +273,44 @@ int main()
 
     if (input.is_open())
     {
+        Polynomial first, second;
+        int count = 0;
         for (string line; getline(input, line);)
         {
+            count++;
             istringstream ss(line);
             int coef, exp;
             Polynomial p;
+
             while (ss >> coef && ss >> exp)
             {
                 p.insertTerm(coef, exp);
             }
-            p.consolidate();
-            p.printPolynomial();
+            if (count == 1)
+            { //1st polynomial
+                first = p;
+            }
+            if (count == 2)
+            { //2nd polynomial
+                second = p;
+            }
         }
+        cout << "As given in the file: " << endl;
+        cout << first;
+        cout << second;
+        cout << "\nCononical Form:" << endl;
+        first.consolidate();
+        second.consolidate();
+        cout << first;
+        cout << second;
+        cout << "\nPerforming Addition yields:" << endl;
+        Polynomial p;
+        p = first + second;
+        cout << p;
+        cout << "\nPerforming Subtraction yields:" << endl;
+        cout << first;
+        cout << "\nPerforming Multiplication yields:" << endl;
+        cout << second;
     }
     else
     {
