@@ -377,17 +377,6 @@ public:
         }
         outFile << endl;
     }
-
-    // ~Polynomial()
-    // {
-    //     Term *current = head;
-    //     while (current != NULL)
-    //     {
-    //         Term *temp = current->next;
-    //         delete current;
-    //         current = temp;
-    //     }
-    // }
 };
 
 int main()
@@ -427,7 +416,7 @@ int main()
         output << "As given in the file: " << endl;
         first.printPolynomial(output);
         second.printPolynomial(output);
-        output << "\nCononical Form:" << endl;
+        output << "\nCanonical Form:" << endl;
         first.consolidate();
         second.consolidate();
         first.printPolynomial(output);
