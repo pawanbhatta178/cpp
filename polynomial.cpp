@@ -400,7 +400,7 @@ int main()
     ofstream output;
     output.open(outputName);
 
-    if (input.is_open())
+    if (input.is_open() && output.is_open())
     {
         Polynomial first, second;
         int count = 0;
