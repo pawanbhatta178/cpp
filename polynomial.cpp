@@ -29,10 +29,27 @@ public:
             {
                 cout << t.coefficient;
             }
+            else if (t.coefficient == 1 && t.exponent == 1)
+            {
+                cout << "x";
+            }
+            else if (t.coefficient == -1 && t.exponent == 1)
+            {
+                cout << "-x";
+            }
+            else if (t.coefficient == 1)
+            {
+                cout << "x^" << t.exponent;
+            }
+            else if (t.coefficient == -1)
+            {
+                cout << "-x^" << t.exponent;
+            }
             else if (t.exponent == 1)
             {
                 cout << t.coefficient << "x";
             }
+
             else
             {
                 cout << t.coefficient << "x^" << t.exponent;
@@ -43,12 +60,27 @@ public:
 
     friend ostream &operator<<(ostream &os, Term *t)
     {
-
         if (t->coefficient != 0)
         {
             if (t->exponent == 0)
             {
                 cout << t->coefficient;
+            }
+            else if (t->coefficient == 1 && t->exponent == 1)
+            {
+                cout << "x";
+            }
+            else if (t->coefficient == -1 && t->exponent == 1)
+            {
+                cout << "-x";
+            }
+            else if (t->coefficient == 1)
+            {
+                cout << "x^" << t->exponent;
+            }
+            else if (t->coefficient == -1)
+            {
+                cout << "-x^" << t->exponent;
             }
             else if (t->exponent == 1)
             {
@@ -195,20 +227,67 @@ public:
         while (t != NULL)
         {
             ans.insertTerm(t->coefficient, t->exponent);
+
             t = t->next;
         }
         Term *t2 = a.head;
         while (t2 != NULL)
         {
             ans.insertTerm(t2->coefficient, t2->exponent);
+
+            t2 = t2->next;
+        }
+        ans.consolidate();
+        return ans;
+    }
+
+    Polynomial operator-(const Polynomial &a)
+    {
+        Polynomial ans;
+        Term *t = head;
+        while (t != NULL)
+        {
+            ans.insertTerm(t->coefficient, t->exponent);
             t = t->next;
         }
+        Term *t2 = a.head;
+        while (t2 != NULL)
+        {
+            ans.insertTerm((-1) * t2->coefficient, t2->exponent);
+            t2 = t2->next;
+        }
+        ans.consolidate();
+        return ans;
+    }
+
+    Polynomial operator*(const Polynomial &a)
+    {
+        Polynomial ans;
+        Term *t = head;
+        while (t != NULL)
+        {
+            Term *t2 = a.head;
+            while (t2 != NULL)
+            {
+                ans.insertTerm(t->coefficient * t2->coefficient, t->exponent + t2->exponent);
+                t2 = t2->next;
+            }
+            t = t->next;
+        }
+
+        ans.consolidate();
         return ans;
     }
 
     friend ostream &operator<<(ostream &os, Polynomial p)
     {
         Term *t = p.head;
+
+        if (t->coefficient == 0)
+        {
+            cout << "0";
+        }
+
         while (t != NULL)
         {
             if (t == p.head)
@@ -232,6 +311,12 @@ public:
     friend ostream &operator<<(ostream &os, Polynomial *p)
     {
         Term *t = p->head;
+
+        if (t->coefficient == 0)
+        {
+            cout << "0";
+        }
+
         while (t != NULL)
         {
             if (t == p->head)
@@ -266,7 +351,6 @@ public:
 
 int main()
 {
-    //READ
     string inputName = "input.txt";
     ifstream input;
     input.open(inputName);
@@ -308,9 +392,11 @@ int main()
         p = first + second;
         cout << p;
         cout << "\nPerforming Subtraction yields:" << endl;
-        cout << first;
+        p = first - second;
+        cout << p;
         cout << "\nPerforming Multiplication yields:" << endl;
-        cout << second;
+        p = first * second;
+        cout << p;
     }
     else
     {
