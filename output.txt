@@ -1,16 +1,16 @@
 As given in the file: 
--5-x
--x-5
+-1+5x+20x^3-9x^2-2x+x^2-2x^3+x^9
+-1+5x+20x^3-9x^2-2x+x^2-2x^3+x^9
 
 Cononical Form:
--x-5
--x-5
+x^9+18x^3-8x^2+3x-1
+x^9+18x^3-8x^2+3x-1
 
 Performing Addition yields:
--2x-10
+2x^9+36x^3-16x^2+6x-2
 
 Performing Subtraction yields:
 0
 
 Performing Multiplication yields:
-x^2+10x+25
+x^18+36x^12-16x^11+6x^10-2x^9+324x^6-288x^5+172x^4-84x^3+25x^2-6x+1

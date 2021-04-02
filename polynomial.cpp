@@ -445,7 +445,7 @@ int main()
     }
     else
     {
-        output << "ERROR: The input file with following name does not exists or there was problem reading it: " << inputName << endl;
+        output << "ERROR: while reading input/output files " << endl;
     }
     input.close();
     output.close();
