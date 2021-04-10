@@ -1,10 +1,10 @@
-poly1 = 2+x
+poly1 = 5x^5+5x-7
 
-poly2 = 2+x
+poly2 = 5x^6+6x^5+9x^2-2x
 
-poly1 + poly2 = 4+2x
+poly1 + poly2 = 5x^6+11x^5+9x^2+3x-7
 
-poly1 - poly2 = 0
+poly1 - poly2 = -5x^6-x^5-9x^2+7x-7
 
-poly1 * poly2 = 4+4x+x^2
+poly1 * poly2 = 25x^11+30x^10+70x^7-15x^6-42x^5+45x^3-73x^2+14x
 

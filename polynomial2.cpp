@@ -75,42 +75,42 @@ public:
     {
         bool termIsZero = false;
         int count = 0;
-        for (const auto &x : poly)
+        for (auto x = poly.rbegin(); x != poly.rend(); ++x)
         {
             //Coefficient is Zero, we dont print anything
-            if (x.second == 0)
+            if (x->second == 0)
             {
                 termIsZero = true;
                 continue;
             }
 
-            if (x.second > 0 && count > 0)
+            if (x->second > 0 && count > 0)
             {
                 outFile << "+";
             }
-            if (x.second == 1)
+            if (x->second == 1)
             {
-                //print nth
+                //print nothing
             }
-            else if (x.second == -1)
+            else if (x->second == -1)
             {
                 outFile << "-";
             }
             else
             {
-                outFile << x.second;
+                outFile << x->second;
             }
 
-            if (x.first == 0)
+            if (x->first == 0)
             {
             }
-            else if (x.first == 1)
+            else if (x->first == 1)
             {
                 outFile << "x";
             }
             else
             {
-                outFile << "x^" << x.first;
+                outFile << "x^" << x->first;
             }
             count++;
         }
@@ -179,6 +179,10 @@ int main()
         p = poly1 * poly2;
         output << "poly1 * poly2 = ";
         p.print(output);
+    }
+    else
+    {
+        cout << "Error reading files" << endl;
     }
     input.close();
     output.close();
