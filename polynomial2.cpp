@@ -26,29 +26,6 @@ public:
         }
     }
 
-    // void add(map<int, int> &poly1, map<int, int> &poly2, map<int, int> &sum)
-    // {
-    //     for (const auto &x : poly1)
-    //     {
-    //         if (poly2[x.first] != 0)
-    //         {
-    //             sum[x.first] = x.second + poly2[x.first];
-    //             cout << "Added" << sum[x.first] << endl;
-    //         }
-    //         else
-    //         {
-    //             sum[x.first] = x.second;
-    //         }
-    //     }
-    //     for (const auto &x : poly2)
-    //     {
-    //         if (poly1[x.first] == 0)
-    //         {
-    //             sum[x.first] = x.second;
-    //         }
-    //     }
-    // }
-
     Polynomial operator+(const Polynomial &a)
     {
         Polynomial ans;
@@ -64,14 +41,46 @@ public:
         return ans;
     }
 
+    Polynomial operator-(const Polynomial &a)
+    {
+        Polynomial ans;
+
+        for (const auto &x : poly)
+        {
+            ans.insertTerm(x.second, x.first);
+        }
+        for (const auto &x : a.poly)
+        {
+            ans.insertTerm((-1) * x.second, x.first);
+        }
+        return ans;
+    }
+
+    Polynomial operator*(const Polynomial &a)
+    {
+        Polynomial ans;
+
+        for (const auto &x : poly)
+        {
+            for (const auto &y : a.poly)
+            {
+                ans.insertTerm(x.second * y.second, x.first + y.first);
+            }
+        }
+
+        return ans;
+    }
+
     void print(ofstream &outFile)
     {
+        bool termIsZero = false;
         int count = 0;
         for (const auto &x : poly)
         {
             //Coefficient is Zero, we dont print anything
             if (x.second == 0)
             {
+                termIsZero = true;
                 continue;
             }
 
@@ -103,10 +112,17 @@ public:
             {
                 outFile << "x^" << x.first;
             }
-
             count++;
         }
-        outFile << endl;
+
+        //If the polynomial evaluates to zero
+        if (count <= 1 && termIsZero)
+        {
+            outFile << "0";
+        }
+
+        outFile << endl
+                << endl;
     }
 };
 
@@ -146,9 +162,22 @@ int main()
                 }
             }
         }
-        Polynomial p = poly1 + poly2;
+        Polynomial p;
+        output << "poly1 = ";
         poly1.print(output);
+        output << "poly2 = ";
         poly2.print(output);
+
+        p = poly1 + poly2;
+        output << "poly1 + poly2 = ";
+        p.print(output);
+
+        p = poly1 - poly2;
+        output << "poly1 - poly2 = ";
+        p.print(output);
+
+        p = poly1 * poly2;
+        output << "poly1 * poly2 = ";
         p.print(output);
     }
     input.close();
