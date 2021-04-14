@@ -1,7 +1,6 @@
 #include <iostream>
 #include <cstdlib>
 #include <cassert>
-#include <ctime>
 using namespace std;
 
 struct Head
@@ -12,11 +11,13 @@ struct Head
 
 static Head pool = {0, 0};
 
-static Head *h = (Head *)new char;
+static Head *h = (Head *)new char[1000];
 
 typedef char *Char_p;
 
 const long WORDSIZE = sizeof(void *);
+
+
 
 template <class T>
 class SA
@@ -170,10 +171,10 @@ public:
         lowCol = lc;
         highCol = hc;
 
-        p = new SA<SA<T> >(lr, hr);
+        p = SA<SA<T> >(lr, hr);
         for (int i = 0; i < (hr - lr + 1); i++)
         {
-            p[i] = new SA<T>(lc, hc);
+            p[i] = SA<T>(lc, hc);
         }
     }
 
@@ -253,31 +254,26 @@ Matrix<int> Multiply(Matrix<int> first, Matrix<int> second)
 
 int main()
 {
-    Matrix<int> m(3, 3);
-    Matrix<int> n(3, 2);
-
-    srand(time(0)); // Initialize random number generator.
-
-    //initializing 1st safe matrix, changing max value of i and j will change the matrix size.
-    for (int i = 0; i < 3; i++)
-    {
-        for (int j = 0; j < 3; j++)
-        {
-            m[i][j] = (rand() % 10);
-        }
-    }
-
-    //initializing 2nd safe matrix, changing max value of i and j will change the matrix size.
-    for (int i = 0; i < 3; i++)
-    {
-        for (int j = 0; j < 2; j++)
-        {
-            n[i][j] = (rand() % 10);
-        }
-    }
-
-    cout << m << " X " << n << endl;
-    cout << "=" << endl;
-    cout << Multiply(m, n) << endl;
+    SA<int> *z = new SA<int>(3, 2);
+    SA<int> a(10), b(3, 5);
+    b[3] = 3;
+    b[4] = 4;
+    b[5] = 5;
+    int i;
+    for (i = 0; i < 10; i++)
+        a[i] = 10 - i;
+    cout << "printing a the first time" << endl;
+    cout << a << endl;
+    cout << "printing using []" << endl;
+    for (i = 0; i < 10; i++)
+        cout << a[i] << endl;
+    // write your own sort
+    // Sort(a, 10);
+    cout << "printing a the second time" << endl;
+    cout << a << endl;
+    b[4] = 12;
+    cout << "printing b " << endl;
+    cout << b << endl;
+    a[10] = 12; // should print an error message and exit
     return 0;
 }
