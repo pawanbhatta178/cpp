@@ -3,27 +3,12 @@
 #include <cassert>
 using namespace std;
 
-struct Head
-{
-    long length;
-    struct Head *next;
-};
-
-static Head pool = {0, 0};
-
-static Head *h = (Head *)new char[1000];
-
-typedef char *Char_p;
-
-const long WORDSIZE = sizeof(void *);
-
-
-
 template <class T>
 class SA
 {
-
 private:
+    static SA<T> *newList;
+    SA<T> *freepointer;
     int lowRow, highRow;
     T *p;
 
@@ -59,6 +44,7 @@ public:
         p = new T[capacity];
     }
 
+    //copy constructor
     SA(const SA &a)
     {
         int size = a.highRow - a.lowRow + 1;
@@ -103,39 +89,34 @@ public:
         return os;
     }
 
-    void *operator new(size_t nbytes)
+    void *operator new(size_t size)
     {
-        cout << "Operator new called. " << endl;
-        if (pool.next)
+        cout << "NEW Operator called" << endl;
+        if (size != sizeof(SA))
         {
-            Head *prev = &pool;
-            for (Head *cur = &pool; cur; cur = cur->next)
-            {
-                if (cur->length >= nbytes)
-                {
-                    prev->next = cur->next;
-                    return (void *)(Char_p(cur) + sizeof(Head));
-                }
-                else
-                {
-                    prev = cur;
-                }
-            }
+            return malloc(size);
         }
-
-        h = (Head *)(((long)((Char_p(h) + WORDSIZE - 1)) / WORDSIZE) * WORDSIZE);
-        h->next = 0;
-        h->length = nbytes;
-        h = (Head *)(Char_p(h) + nbytes + sizeof(Head));
-        return (void *)(Char_p(h) - nbytes);
+        else if (!newList)
+        {
+            newList = (SA<T> *)new char[100 * sizeof(SA)];
+            int i;
+            for (i = 0; i < 99; i++)
+            {
+                newList[i].freepointer = &(newList[i + 1]);
+            }
+            newList[i].freepointer = 0;
+        }
+        SA<T> *savenew = newList;
+        newList = newList->freepointer;
+        return savenew;
     }
 
     void operator delete(void *ptr)
     {
-        cout << "Operator delete called." << endl;
-        Head *p = (Head *)(Char_p(ptr) - sizeof(Head));
-        p->next = pool.next;
-        pool.next = p;
+        cout << "Delete Operator called" << endl;
+        SA *s = (SA *)ptr;
+        s->freepointer = newList;
+        newList = s;
     }
 
     ~SA()
@@ -145,11 +126,14 @@ public:
 };
 
 template <class T>
+SA<T> *SA<T>::newList = 0;
+
+template <class T>
 class Matrix
 {
 public:
     int lowRow, highRow, lowCol, highCol;
-    SA<SA<T> > p;
+    SA<SA<T> > *p;
 
     Matrix()
     {
@@ -171,10 +155,10 @@ public:
         lowCol = lc;
         highCol = hc;
 
-        p = SA<SA<T> >(lr, hr);
+        p = new SA<SA<T> >(lr, hr);
         for (int i = 0; i < (hr - lr + 1); i++)
         {
-            p[i] = SA<T>(lc, hc);
+            (*p)[i] = SA<T>(lc, hc);
         }
     }
 
@@ -189,26 +173,35 @@ public:
         highRow = rowCapacity - 1;
         lowCol = 0;
         highCol = colCapacity - 1;
-        p = SA<SA<T> >(lowRow, highRow);
+        p = new SA<SA<T> >(lowRow, highRow);
         for (int i = 0; i < (highRow - lowRow + 1); i++)
         {
-            p[i] = SA<T>(lowCol, highCol);
+            (*p)[i] = SA<T>(lowCol, highCol);
         }
     }
 
-    Matrix<T> &operator=(const Matrix<T> &a)
+    Matrix(const Matrix &m)
+    {
+        lowRow = m.lowRow;
+        highRow = m.highRow;
+        lowCol = m.lowCol;
+        highCol = m.highCol;
+        Matrix<T> newMatrix(m.lowRow, m.highRow, m.lowCol, m.highCol);
+        memmove(p, m.p, sizeof(SA<SA<T> >));
+    }
+
+    Matrix<T> &
+    operator=(const Matrix<T> &a)
     {
         if (this == &a)
         {
             return *this;
         }
-        delete[] p;
+        delete p;
         int size = a.highRow - a.lowRow + 1;
-        p = new T[size];
+        p = new Matrix<T>(a.lowRow, a.highRow, a.lowCol, a.highCol);
         for (int i = 0; i < size; i++)
-            p[i] = a.p[i];
-        lowRow = a.lowRow;
-        highRow = a.highRow;
+            (*p)[i] = a.p[i];
         return *this;
     }
 
@@ -219,7 +212,7 @@ public:
             cout << "index " << i << " out of range" << endl;
             exit(1);
         }
-        return p[i - lowRow];
+        return (*p)[i - lowRow];
     }
 
     friend ostream &operator<<(ostream &os, Matrix<T> s)
@@ -227,8 +220,13 @@ public:
         int size = s.highRow - s.lowRow + 1;
         cout << endl;
         for (int i = 0; i < size; i++)
-            cout << s.p[i] << endl;
+            cout << s.p->operator[](i) << endl;
         return os;
+    }
+
+    ~Matrix()
+    {
+        delete p;
     }
 };
 
@@ -254,26 +252,31 @@ Matrix<int> Multiply(Matrix<int> first, Matrix<int> second)
 
 int main()
 {
-    SA<int> *z = new SA<int>(3, 2);
-    SA<int> a(10), b(3, 5);
-    b[3] = 3;
-    b[4] = 4;
-    b[5] = 5;
-    int i;
-    for (i = 0; i < 10; i++)
-        a[i] = 10 - i;
-    cout << "printing a the first time" << endl;
-    cout << a << endl;
-    cout << "printing using []" << endl;
-    for (i = 0; i < 10; i++)
-        cout << a[i] << endl;
-    // write your own sort
-    // Sort(a, 10);
-    cout << "printing a the second time" << endl;
-    cout << a << endl;
-    b[4] = 12;
-    cout << "printing b " << endl;
-    cout << b << endl;
-    a[10] = 12; // should print an error message and exit
+    Matrix<int> m(3, 3);
+    Matrix<int> n(3, 2);
+
+    srand(time(0)); // Initialize random number generator.
+
+    //initializing 1st safe matrix, changing max value of i and j will change the matrix size.
+    for (int i = 0; i < 3; i++)
+    {
+        for (int j = 0; j < 3; j++)
+        {
+            m[i][j] = (rand() % 10);
+        }
+    }
+
+    //initializing 2nd safe matrix, changing max value of i and j will change the matrix size.
+    for (int i = 0; i < 3; i++)
+    {
+        for (int j = 0; j < 2; j++)
+        {
+            n[i][j] = (rand() % 10);
+        }
+    }
+
+    cout << m << " X " << n << endl;
+    cout << "=" << endl;
+    cout << Multiply(m, n) << endl;
     return 0;
 }
