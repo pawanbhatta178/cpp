@@ -81,5 +81,5 @@ ostream &operator<<(ostream &os, const String r)
 int main()
 {
 
-    String s(String("EHY") + String("ajsjas"));
+    String s = String("EHY") + String("ajsjas");
 }

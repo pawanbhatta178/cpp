@@ -73,8 +73,11 @@ public:
 
     T &operator[](int i)
     {
+
         if (i < lowRow || i > highRow)
         {
+            cout << "SA [] called" << endl;
+
             cout << "index " << i << " out of range" << endl;
             exit(1);
         }
@@ -91,7 +94,6 @@ public:
 
     void *operator new(size_t size)
     {
-        cout << "NEW Operator called" << endl;
         if (size != sizeof(SA))
         {
             return malloc(size);
@@ -186,12 +188,21 @@ public:
         highRow = m.highRow;
         lowCol = m.lowCol;
         highCol = m.highCol;
-        Matrix<T> newMatrix(m.lowRow, m.highRow, m.lowCol, m.highCol);
+        p = (SA<SA<T> > *)malloc(sizeof(SA<SA<T> >));
         memmove(p, m.p, sizeof(SA<SA<T> >));
     }
 
-    Matrix<T> &
-    operator=(const Matrix<T> &a)
+    Matrix(Matrix &&m)
+    {
+        lowRow = m.lowRow;
+        highRow = m.highRow;
+        lowCol = m.lowCol;
+        highCol = m.highCol;
+        p = m.p;
+        m.p = nullptr;
+    }
+
+    Matrix<T> &operator=(const Matrix<T> &a)
     {
         if (this == &a)
         {
@@ -209,6 +220,7 @@ public:
     {
         if (i < lowRow || i > highRow)
         {
+
             cout << "index " << i << " out of range" << endl;
             exit(1);
         }
@@ -224,29 +236,35 @@ public:
         return os;
     }
 
-    ~Matrix()
-    {
-        delete p;
-    }
+    // ~Matrix()
+    // {
+    //     cout << "MAtrix destructor" << endl;
+    //     delete p;
+    // }
 };
 
-Matrix<int> Multiply(Matrix<int> first, Matrix<int> second)
+Matrix<int> Multiply(Matrix<int> &first, Matrix<int> &m)
 {
-    if ((first.highCol - first.lowCol) != (second.highRow - second.lowRow))
+
+    if ((first.highCol - first.lowCol) != (m.highRow - m.lowRow))
     {
-        cout << "Matrix Multiplication only possible when number of cols of first matrix equals number of rows of the second matrix." << endl;
+        cout << "Matrix Multiplication only possible when number of cols of first matrix equals number of rows of the m matrix." << endl;
         exit(0);
     }
-    Matrix<int> ans(first.highRow - first.lowRow + 1, second.highCol - second.lowCol + 1);
+
+    Matrix<int> ans(first.highRow - first.lowRow + 1, m.highCol - m.lowCol + 1);
     for (int i = 0; i < first.highRow - first.lowRow + 1; i++)
     {
-        for (int j = 0; j < second.highCol - second.lowCol + 1; j++)
+        for (int j = 0; j < m.highCol - m.lowCol + 1; j++)
         {
             ans[i][j] = 0;
             for (int k = 0; k < first.highCol - first.lowCol + 1; k++)
-                ans[i][j] += first[i][k] * second[k][j];
+            {
+                ans[i][j] += first[i][k] * m[k][j];
+            }
         }
     }
+
     return ans;
 }
 
@@ -277,6 +295,6 @@ int main()
 
     cout << m << " X " << n << endl;
     cout << "=" << endl;
-    cout << Multiply(m, n) << endl;
+    cout << Multiply(m, n);
     return 0;
 }
