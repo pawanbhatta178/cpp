@@ -3,6 +3,10 @@
         "iostream": "cpp",
         "memory": "cpp",
         "utility": "cpp",
-        "map": "cpp"
+        "map": "cpp",
+        "ostream": "cpp",
+        "__bit_reference": "cpp",
+        "algorithm": "cpp",
+        "type_traits": "cpp"
     }
 }
