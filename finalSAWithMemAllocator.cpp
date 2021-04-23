@@ -16,7 +16,7 @@ private:
 public:
     SA()
     {
-        cout << "SA default constructor called" << endl;
+        // cout << "SA default constructor called" << endl;
         lowRow = 0;
         highRow = -1;
         p = NULL;
@@ -24,7 +24,7 @@ public:
 
     SA(int l, int h)
     {
-        cout << "SA constructor with bounds called" << endl;
+        // cout << "SA constructor with bounds called" << endl;
         if (h < l)
         {
             cout << "constructor error in bounds definition" << endl;
@@ -37,7 +37,7 @@ public:
 
     SA(int capacity)
     {
-        cout << "SA constructor without bounds called" << endl;
+        // cout << "SA constructor without bounds called" << endl;
         if (capacity < 0)
         {
             cout << "constructor error: Please instantiate SA of positive length" << endl;
@@ -51,7 +51,7 @@ public:
     //copy constructor
     SA(const SA &a)
     {
-        cout << "SA copy constructor called" << endl;
+        // cout << "SA copy constructor called" << endl;
         int size = a.highRow - a.lowRow + 1;
         p = new T[size];
         for (int i = 0; i < size; i++)
@@ -62,7 +62,7 @@ public:
 
     SA &operator=(const SA &a)
     {
-        cout << "SA Assignment operator called" << endl;
+        // cout << "SA Assignment operator called" << endl;
         if (this == &a)
         {
             return *this;
@@ -79,7 +79,7 @@ public:
 
     SA &&operator=(SA &&a)
     {
-        cout << "SA move assign operator called" << endl;
+        // cout << "SA move assign operator called" << endl;
         delete[] p;
         p = a.p;
         lowRow = a.lowRow;
@@ -90,7 +90,6 @@ public:
 
     T &operator[](int i)
     {
-        cout << "SA [] operator called" << endl;
         if (i < lowRow || i > highRow)
         {
             cout << "index " << i << " out of range" << endl;
@@ -101,7 +100,7 @@ public:
 
     friend ostream &operator<<(ostream &os, SA &s)
     {
-        cout << "SA << operator called" << endl;
+        // cout << "SA << operator called" << endl;
         int size = s.highRow - s.lowRow + 1;
         for (int i = 0; i < size; i++)
             cout << s.p[i] << " ";
@@ -111,7 +110,7 @@ public:
 
     friend ostream &operator<<(ostream &os, SA &&s)
     {
-        cout << "SA << operator with rvalue param called" << endl;
+        // cout << "SA << operator with rvalue param called" << endl;
         int size = s.highRow - s.lowRow + 1;
         for (int i = 0; i < size; i++)
             cout << s.p[i] << " ";
@@ -121,7 +120,7 @@ public:
 
     friend ostream &operator<<(ostream &os, SA *s)
     {
-        cout << "SA << operator with rvalue param called" << endl;
+        // cout << "SA << operator with rvalue param called" << endl;
         int size = s->highRow - s->lowRow + 1;
         for (int i = 0; i < size; i++)
             cout << s->p[i] << " ";
@@ -131,7 +130,7 @@ public:
 
     void *operator new(size_t size)
     {
-        cout << "SA new operator called" << endl;
+        // cout << "SA new operator called" << endl;
         if (size != sizeof(SA))
         {
             return malloc(size);
@@ -153,7 +152,7 @@ public:
 
     void operator delete(void *ptr)
     {
-        cout << "SA Delete Operator called" << endl;
+        // cout << "SA Delete Operator called" << endl;
         SA *s = (SA *)ptr;
         s->freepointer = newList;
         newList = s;
@@ -161,7 +160,7 @@ public:
 
     ~SA()
     {
-        cout << "SA Destructor called" << endl;
+        // cout << "SA Destructor called" << endl;
         delete[] p;
     }
 };
@@ -188,7 +187,8 @@ public:
     {
         if ((hr < lr) || (hc < hr))
         {
-            cout << "constructor error in bounds definition" << endl;
+            cout << lr << " " << hr << " " << lc << " " << hc;
+            cout << "Matrix constructor error in bounds definition" << endl;
             exit(1);
         }
         lowRow = lr;
@@ -207,7 +207,7 @@ public:
     {
         if (rowCapacity < 0 || colCapacity < 0)
         {
-            cout << "constructor error: Please instantiate SA of positive length" << endl;
+            cout << "Constructor error: Please instantiate Matrix of positive length" << endl;
             exit(1);
         }
         lowRow = 0;
@@ -253,7 +253,7 @@ public:
         return *this;
     }
 
-    Matrix<T> &&operator=(const Matrix<T> &&a)
+    Matrix<T> &&operator=(Matrix<T> &&a)
     {
         delete p;
         lowRow = a.lowRow;
@@ -275,28 +275,30 @@ public:
         return (*p)[i];
     }
 
-    Matrix<T> &operator*(const Matrix<T> &m)
-    {
-        if ((highCol - lowCol) != (m.highRow - m.lowRow))
-        {
-            cout << "Matrix Multiplication only possible when number of cols of first matrix equals number of rows of the m matrix." << endl;
-            exit(0);
-        }
+    // Matrix<T> &operator*(const Matrix<T> &m)
+    // {
+    //     if ((highCol - lowCol) != (m.highRow - m.lowRow))
+    //     {
+    //         cout << "Matrix Multiplication only possible when number of cols of first matrix equals number of rows of the m matrix." << endl;
+    //         exit(0);
+    //     }
 
-        Matrix<int> ans(highRow - lowRow + 1, m.highCol - m.lowCol + 1);
-        for (int i = 0; i < highRow - lowRow + 1; i++)
-        {
-            for (int j = 0; j < m.highCol - m.lowCol + 1; j++)
-            {
-                ans[i][j] = 0;
-                for (int k = 0; k < highCol - lowCol + 1; k++)
-                {
-                    ans[i][j] += this->operator[](i)[k] * m[k][j];
-                }
-            }
-        }
-        return ans;
-    }
+    //     Matrix<int> ans(highRow - lowRow + 1, m.highCol - m.lowCol + 1);
+
+    //     for (int i = 0; i <= highRow - lowRow; i++)
+    //     {
+    //         for (int j = 0; j <= m.highCol - m.lowCol; j++)
+    //         {
+    //             ans[i][j] = 0;
+
+    //             for (int k = 0; k <= highCol - lowCol; k++)
+    //             {
+    //                 ans[i][j] += (*this)[i + lowRow][k + lowCol] * m[k + m.lowRow][j + m.lowCol];
+    //             }
+    //         }
+    //     }
+    //     return ans;
+    // }
 
     friend ostream &
     operator<<(ostream &os, Matrix<T> &s)
@@ -309,21 +311,84 @@ public:
 
     ~Matrix()
     {
-        cout << "MAtrix destructor" << endl;
         delete p;
     }
 };
 
+Matrix<int> Multiply(Matrix<int> &first, Matrix<int> &m)
+{
+
+    if ((first.highCol - first.lowCol) != (m.highRow - m.lowRow))
+    {
+        cout << first.highCol << " " << first.lowCol << " " << m.highRow << " " << m.lowRow << endl;
+        cout << "Matrix Multiplication only possible when number of cols of first matrix equals number of rows of the m matrix." << endl;
+        exit(0);
+    }
+
+    Matrix<int> ans(first.highRow - first.lowRow + 1, m.highCol - m.lowCol + 1);
+
+    for (int i = 0; i <= first.highRow - first.lowRow; i++)
+    {
+        for (int j = 0; j <= m.highCol - m.lowCol; j++)
+        {
+            ans[i][j] = 0;
+
+            for (int k = 0; k <= first.highCol - first.lowCol; k++)
+            {
+
+                ans[i][j] += first[i + first.lowRow][k + first.lowCol] * m[k + m.lowRow][j + m.lowCol];
+            }
+        }
+    }
+
+    return ans;
+}
+
 int main()
 {
-    Matrix<int> m(6, 6);
-    Matrix<int> n(6, 8);
-    Matrix<int> a(6, 8);
-    a = m * n;
-    cout << "m";
+    int rowLow1 = 4;
+    int colLow1 = 4;
+    int rowHigh1 = 8;
+    int colHigh1 = 8;
+
+    int rowHigh2 = 5;
+    int colHigh2 = 8;
+
+    //specifying both lower and upper bounds for first matrix
+    Matrix<int> m(rowLow1, rowHigh1, colLow1, colHigh1);
+
+    //specifying only sizes for 2nd matrix
+    Matrix<int>
+        n(rowHigh2, colHigh2);
+
+    // Initializing random number generator.
+    srand(time(0));
+
+    //initializing 1st safe matrix, changing max value of i and j will change the matrix size.
+    for (int i = m.lowRow; i <= m.highRow; i++)
+    {
+        for (int j = m.lowCol; j <= m.highCol; j++)
+        {
+            m[i][j] = (rand() % 10);
+        }
+    }
+
+    //initializing 2nd safe matrix, changing max value of i and j will change the matrix size.
+    for (int i = n.lowRow; i <= n.highRow; i++)
+    {
+        for (int j = n.lowCol; j <= n.highCol; j++)
+        {
+            n[i][j] = (rand() % 10);
+        }
+    }
+
+    //Answer for matrix multiplication
+    Matrix<int> a(Multiply(m, n));
+
+    cout << "m =";
     cout << m << endl;
-    cout << "n";
+    cout << "n =";
     cout << n << endl;
-    cout << "a" << a;
-    srand(time(0)); // Initialize random number generator.
+    cout << "m*n =" << endl
+         << a;
 }
