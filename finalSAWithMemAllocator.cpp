@@ -346,25 +346,24 @@ Matrix<int> Multiply(Matrix<int> &first, Matrix<int> &m)
 
 int main()
 {
+    //specifying both upper and lower bounds for the first matrix
     int rowLow1 = 4;
     int colLow1 = 4;
     int rowHigh1 = 8;
     int colHigh1 = 8;
 
+    //specifying only sizes for the 2nd matrix
     int rowHigh2 = 5;
     int colHigh2 = 8;
 
-    //specifying both lower and upper bounds for first matrix
+    // Initializing both first and second matrices
     Matrix<int> m(rowLow1, rowHigh1, colLow1, colHigh1);
-
-    //specifying only sizes for 2nd matrix
-    Matrix<int>
-        n(rowHigh2, colHigh2);
+    Matrix<int> n(rowHigh2, colHigh2);
 
     // Initializing random number generator.
     srand(time(0));
 
-    //initializing 1st safe matrix, changing max value of i and j will change the matrix size.
+    //initializing 1st safe matrix
     for (int i = m.lowRow; i <= m.highRow; i++)
     {
         for (int j = m.lowCol; j <= m.highCol; j++)
@@ -373,7 +372,7 @@ int main()
         }
     }
 
-    //initializing 2nd safe matrix, changing max value of i and j will change the matrix size.
+    //initializing 2nd safe matrix
     for (int i = n.lowRow; i <= n.highRow; i++)
     {
         for (int j = n.lowCol; j <= n.highCol; j++)
@@ -383,12 +382,15 @@ int main()
     }
 
     //Answer for matrix multiplication
-    Matrix<int> a(Multiply(m, n));
+    Matrix<int> ans(Multiply(m, n));
 
-    cout << "m =";
-    cout << m << endl;
-    cout << "n =";
-    cout << n << endl;
-    cout << "m*n =" << endl
-         << a;
+    cout << endl
+         << "m =" << endl
+         << m << endl;
+
+    cout << "n =" << endl
+         << n << endl;
+
+    cout << "m * n =" << endl
+         << ans;
 }
