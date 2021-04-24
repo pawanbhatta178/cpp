@@ -1,16 +1,10 @@
-As given in the file: 
-5x^5+5x-7
--5x^5-2x+5x^6+9x^2
+poly1 = 5x^5+5x-7
 
-Canonical Form:
-5x^5+5x-7
-5x^6-5x^5+9x^2-2x
+poly2 = 5x^6-5x^5+9x^2-2x
 
-Performing Addition yields:
-5x^6+9x^2+3x-7
+poly1 + poly2 = 5x^6+9x^2+3x-7
 
-Performing Subtraction yields:
--5x^6+10x^5-9x^2+7x-7
+poly1 - poly2 = -5x^6+10x^5-9x^2+7x-7
 
-Performing Multiplication yields:
-25x^11-25x^10+70x^7-70x^6+35x^5+45x^3-73x^2+14x
+poly1 * poly2 = 25x^11-25x^10+70x^7-70x^6+35x^5+45x^3-73x^2+14x
+
