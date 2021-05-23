@@ -1,16 +1,15 @@
 #include <iostream>
 #include <cstdlib>
 #include <cassert>
-#include <ctime>
 using namespace std;
 
 template <class SA>
 class SAIterator
 {
 public:
-    using ValueType = typename SA::ValueType;
-    using PointerType = ValueType *;
-    using ReferenceType = ValueType &;
+    typedef typename SA::ValueType ValueType;
+    typedef ValueType *PointerType;
+    typedef ValueType &ReferenceType;
 
     SAIterator(PointerType ptr) : m_Ptr(ptr){};
 
@@ -77,8 +76,8 @@ private:
     T *p;
 
 public:
-    using ValueType = T;
-    using Iterator = SAIterator<SA<T> >;
+    typedef T ValueType;
+    typedef SAIterator<SA<T> > Iterator;
     SA()
     {
         lowRow = 0;
@@ -173,13 +172,19 @@ public:
 int main()
 {
     SA<int> a(2, 90);
-    a[2] = 89;
-    for (int value : a)
-    {
-        cout << value << endl;
-    }
 
-    srand(time(0)); // Initialize random number generator.
+    a[2] = 89;
+    a[44] = 90;
+
+    SA<int>::Iterator it = find(a.begin(), a.end(), 900);
+    if (it != a.end())
+    {
+        cout << "Found it" << *it;
+    }
+    else
+    {
+        cout << "Could not find" << *it;
+    }
 
     return 0;
 }
