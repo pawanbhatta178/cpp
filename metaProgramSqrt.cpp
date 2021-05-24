@@ -3,22 +3,24 @@
 #include <cassert>
 using namespace std;
 // primary template to compute 3 to the Nth
-template <int N>
-class Pow3
+template <int N, int LO = 1, int HI = N>
+class Sqrt
 {
 public:
-    static int const result = 3 * Pow3<N - 1>::result;
+    static int const mid = (LO + HI + 1) / 2;
+    static int const result = (N < mid * mid) ? Sqrt<N, LO, mid - 1>::result : Sqrt<N, mid, HI>::result;
 };
-// full specialization to end the recursion
-template <>
-class Pow3<0>
+
+//Base Case using partial specialization
+template <int N, int M>
+class Sqrt<N, M, M>
 {
 public:
-    static int const result = 1;
+    static int const result = M;
 };
 
 int main()
 {
-    Pow3<2> p;
-    cout << p.result << endl;
+    Sqrt<82> a;
+    cout << a.result << endl;
 }
