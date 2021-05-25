@@ -171,19 +171,30 @@ public:
 
 int main()
 {
-    SA<int> a(2, 90);
+    SA<int> a(0, 90);
 
-    a[2] = 89;
-    a[44] = 90;
-
-    SA<int>::Iterator it = find(a.begin(), a.end(), 900);
-    if (it != a.end())
+    for (int i = 2; i < 90; ++i)
     {
-        cout << "Found it" << *it;
+        a[i] = 2 * i;
     }
-    else
+
+    int Number = 0;
+    while (Number != -1)
     {
-        cout << "Could not find" << *it;
+        cout << "\nEnter the element to find (-1 = end):";
+        cin >> Number;
+        if (Number != -1)
+        {
+            SA<int>::Iterator it = find(a.begin(), a.end(), Number);
+            if (it != a.end())
+            {
+                cout << "Found it: " << *it;
+            }
+            else
+            {
+                cout << "Could not find the element";
+            }
+        }
     }
 
     return 0;
